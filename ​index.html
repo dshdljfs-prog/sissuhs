@@ -1,0 +1,1629 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>متجر بوده المكسيكي | Boda Programming Store</title>
+    
+    <!-- Google Fonts & FontAwesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* ==========================================================================
+           CSS Variables & Futuristic Cyber Theme Design Tokens
+           ========================================================================== */
+        :root {
+            --bg-color: #080d1a;
+            --surface-color: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --card-border: rgba(0, 243, 255, 0.15);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            
+            /* Neon Palette */
+            --neon-blue: #00f3ff;
+            --neon-purple: #b026ff;
+            --neon-pink: #ff007f;
+            --neon-green: #00ff88;
+            --whatsapp-green: #25d366;
+            
+            --glow-primary: 0 0 20px rgba(0, 243, 255, 0.35);
+            --glow-secondary: 0 0 20px rgba(176, 38, 255, 0.35);
+            --glass-bg: rgba(15, 23, 42, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            
+            --transition-speed: 0.3s;
+            --radius-sm: 8px;
+            --radius-md: 14px;
+            --radius-lg: 22px;
+        }
+
+        [data-theme="light"] {
+            --bg-color: #f1f5f9;
+            --surface-color: #ffffff;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --card-border: rgba(108, 92, 231, 0.2);
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --glow-primary: 0 4px 20px rgba(0, 243, 255, 0.15);
+            --glow-secondary: 0 4px 20px rgba(176, 38, 255, 0.15);
+            --glass-bg: rgba(255, 255, 255, 0.92);
+            --glass-border: rgba(0, 0, 0, 0.08);
+        }
+
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            overflow-x: hidden;
+            transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+            line-height: 1.6;
+        }
+
+        /* Background Animated Grid & Glow Elements */
+        .cyber-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .cyber-grid {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background-image: 
+                linear-gradient(to right, rgba(0, 243, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(176, 38, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            transform: rotate(-12deg);
+        }
+
+        .glow-orb-1, .glow-orb-2 {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.25;
+            animation: orbFloat 10s infinite alternate ease-in-out;
+        }
+
+        .glow-orb-1 {
+            width: 450px;
+            height: 450px;
+            background: var(--neon-blue);
+            top: -100px;
+            right: -100px;
+        }
+
+        .glow-orb-2 {
+            width: 550px;
+            height: 550px;
+            background: var(--neon-purple);
+            bottom: -150px;
+            left: -150px;
+            animation-delay: -5s;
+        }
+
+        @keyframes orbFloat {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(40px, 60px) scale(1.15); }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-color);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--surface-color);
+            border: 1px solid var(--card-border);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--neon-blue);
+        }
+
+        /* Container Layout */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Header & Navigation bar */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--glass-border);
+            transition: all var(--transition-speed) ease;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .logo-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 900;
+            font-size: 1.4rem;
+        }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-size: 1.2rem;
+            box-shadow: var(--glow-primary);
+        }
+
+        .logo-text span {
+            color: var(--neon-blue);
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.8rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.2s ease;
+            position: relative;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--neon-blue);
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            right: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--neon-blue);
+            box-shadow: 0 0 8px var(--neon-blue);
+            border-radius: 2px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.7rem 1.4rem;
+            border-radius: var(--radius-md);
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            border: none;
+            outline: none;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--neon-blue), #00a8ff);
+            color: #000;
+            box-shadow: var(--glow-primary);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px rgba(0, 243, 255, 0.6);
+        }
+
+        .btn-secondary {
+            background: rgba(176, 38, 255, 0.15);
+            color: var(--text-main);
+            border: 1px solid rgba(176, 38, 255, 0.4);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(176, 38, 255, 0.3);
+            border-color: var(--neon-purple);
+            transform: translateY(-2px);
+            box-shadow: var(--glow-secondary);
+        }
+
+        .icon-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-sm);
+            background: var(--surface-color);
+            border: 1px solid var(--card-border);
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .icon-btn:hover {
+            border-color: var(--neon-blue);
+            color: var(--neon-blue);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 5rem 0 3rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            background: rgba(0, 243, 255, 0.08);
+            border: 1px solid rgba(0, 243, 255, 0.25);
+            border-radius: 30px;
+            color: var(--neon-blue);
+            font-size: 0.88rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero h1 {
+            font-size: 3.2rem;
+            font-weight: 900;
+            line-height: 1.25;
+            margin-bottom: 1.2rem;
+            background: linear-gradient(135deg, #ffffff 0%, var(--text-muted) 50%, var(--neon-blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        [data-theme="light"] .hero h1 {
+            background: linear-gradient(135deg, #0f172a 0%, #334155 50%, var(--neon-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 680px;
+            margin: 0 auto 2.5rem;
+        }
+
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        /* Search & Filter Bar Section */
+        .filter-section {
+            margin: 2rem 0 3rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--card-border);
+            padding: 1.2rem;
+            border-radius: var(--radius-lg);
+            backdrop-filter: blur(10px);
+        }
+
+        .filter-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr auto;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .input-group {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-group i {
+            position: absolute;
+            right: 14px;
+            color: var(--text-muted);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 2.8rem 0.75rem 1rem;
+            background: var(--surface-color);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-md);
+            color: var(--text-main);
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
+        }
+
+        select.form-control {
+            appearance: none;
+            padding-right: 1.2rem;
+            cursor: pointer;
+        }
+
+        .favorites-toggle-btn {
+            white-space: nowrap;
+        }
+
+        /* Product Section Grid */
+        .products-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.8rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--neon-blue);
+        }
+
+        .product-count {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            background: var(--surface-color);
+            padding: 4px 12px;
+            border-radius: 20px;
+            border: 1px solid var(--card-border);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.8rem;
+        }
+
+        /* Product Card Styling */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-lg);
+            padding: 1.4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(0, 243, 255, 0.4);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4), var(--glow-primary);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .badge {
+            background: rgba(0, 243, 255, 0.1);
+            color: var(--neon-blue);
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
+
+        .fav-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .fav-btn.active {
+            color: var(--neon-pink);
+            text-shadow: 0 0 10px var(--neon-pink);
+        }
+
+        .card-icon-box {
+            width: 56px;
+            height: 56px;
+            background: var(--surface-color);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            color: var(--neon-blue);
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            color: var(--text-main);
+        }
+
+        .card-code {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-bottom: 0.8rem;
+            font-family: monospace;
+            letter-spacing: 0.5px;
+        }
+
+        .card-desc {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 1.2rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            line-height: 1.5;
+        }
+
+        .card-footer {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            border-top: 1px solid var(--glass-border);
+            padding-top: 1rem;
+            margin-top: auto;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .price-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .price-val {
+            font-size: 1.35rem;
+            font-weight: 900;
+            color: var(--neon-green);
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.2);
+        }
+
+        .card-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .btn-sm {
+            padding: 0.5rem;
+            font-size: 0.85rem;
+            justify-content: center;
+        }
+
+        .btn-whatsapp {
+            background: var(--whatsapp-green);
+            color: #fff;
+            box-shadow: 0 0 12px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn-whatsapp:hover {
+            background: #20ba5a;
+            box-shadow: 0 0 18px rgba(37, 211, 102, 0.5);
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 1rem;
+            grid-column: 1 / -1;
+            background: var(--glass-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-lg);
+        }
+
+        .empty-state i {
+            font-size: 3.5rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        /* Features & Info Section */
+        .features-section {
+            margin: 5rem 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feature-box {
+            background: var(--glass-bg);
+            border: 1px solid var(--card-border);
+            padding: 1.8rem;
+            border-radius: var(--radius-lg);
+            text-align: center;
+        }
+
+        .feature-box i {
+            font-size: 2.2rem;
+            color: var(--neon-purple);
+            margin-bottom: 1rem;
+        }
+
+        .feature-box h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-box p {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+        }
+
+        /* Modal Base Styling */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-container {
+            background: var(--surface-color);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-lg);
+            max-width: 650px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 2rem;
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+
+        .modal-overlay.active .modal-container {
+            transform: scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1.2rem;
+            left: 1.2rem;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.3rem;
+            cursor: pointer;
+        }
+
+        .modal-close:hover {
+            color: var(--neon-pink);
+        }
+
+        .modal-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 0.3rem;
+        }
+
+        .modal-subtitle {
+            font-size: 0.85rem;
+            color: var(--neon-blue);
+            font-family: monospace;
+        }
+
+        .modal-body {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .detail-block {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            padding: 1rem;
+            border-radius: var(--radius-md);
+        }
+
+        .detail-block h4 {
+            font-size: 0.95rem;
+            color: var(--neon-purple);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .detail-block p, .detail-block ul {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .detail-block ul {
+            padding-right: 1.2rem;
+        }
+
+        /* Floating WhatsApp Button */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 25px;
+            left: 25px;
+            width: 60px;
+            height: 60px;
+            background: var(--whatsapp-green);
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
+            z-index: 90;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 30px rgba(37, 211, 102, 0.6);
+        }
+
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1100;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            background: var(--surface-color);
+            color: var(--text-main);
+            border-right: 4px solid var(--neon-blue);
+            border-top: 1px solid var(--card-border);
+            border-bottom: 1px solid var(--card-border);
+            border-left: 1px solid var(--card-border);
+            padding: 0.9rem 1.4rem;
+            border-radius: var(--radius-md);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: toastIn 0.3s ease forwards;
+        }
+
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--glass-border);
+            background: var(--glass-bg);
+            padding: 3rem 0 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-brand p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 0.8rem;
+            max-width: 380px;
+        }
+
+        .footer-col h4 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: var(--text-main);
+        }
+
+        .footer-col ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .footer-col a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s ease;
+        }
+
+        .footer-col a:hover {
+            color: var(--neon-blue);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            border-top: 1px solid var(--glass-border);
+            padding-top: 1.5rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 992px) {
+            .hero h1 { font-size: 2.5rem; }
+            .filter-grid { grid-template-columns: 1fr 1fr; }
+            .footer-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hero h1 { font-size: 2rem; }
+            .hero p { font-size: 1rem; }
+            .filter-grid { grid-template-columns: 1fr; }
+            .card-buttons { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Grid & Glowing Animations -->
+    <div class="cyber-bg">
+        <div class="cyber-grid"></div>
+        <div class="glow-orb-1"></div>
+        <div class="glow-orb-2"></div>
+    </div>
+
+    <!-- Sticky Header Navigation -->
+    <header>
+        <div class="nav-container">
+            <a href="#" class="logo-box">
+                <div class="logo-icon"><i class="fa-solid fa-code"></i></div>
+                <div class="logo-text" id="headerStoreName">بوده <span>المكسيكي</span></div>
+            </a>
+
+            <ul class="nav-links">
+                <li><a href="#" class="nav-link active" onclick="filterCategory('all'); return false;">الرئيسية</a></li>
+                <li><a href="#products" class="nav-link">المنتجات والخدمات</a></li>
+                <li><a href="#about" class="nav-link">من نحن</a></li>
+                <li><a href="#" class="nav-link" onclick="openAdminModal(); return false;"><i class="fa-solid fa-lock"></i> لوحة التحكم</a></li>
+            </ul>
+
+            <div class="header-actions">
+                <button class="icon-btn" id="themeToggleBtn" title="تبديل الوضع الداكن/الفاتح">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+                <button class="btn btn-secondary" onclick="toggleFavoritesOnly()">
+                    <i class="fa-solid fa-heart" style="color: var(--neon-pink);"></i>
+                    <span id="favBadgeCount">المفضلة (0)</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="container">
+
+        <!-- Hero Banner -->
+        <section class="hero">
+            <div class="hero-badge">
+                <i class="fa-solid fa-bolt"></i> متجر البرمجة والحلول الرقمية رقم #1
+            </div>
+            <h1 id="heroTitleDisplay">حوّل فكرتك إلى تطبيق احترافي مع بوده المكسيكي</h1>
+            <p id="heroSubDisplay">تطوير تطبيقات أندرويد، مشاريع Sketchware Pro، مواقع ويب متكاملة، ولوحات تحكم احترافية بأعلى جودة ودقة.</p>
+            <div class="hero-buttons">
+                <a href="#products" class="btn btn-primary"><i class="fa-solid fa-rocket"></i> اكتشف المنتجات</a>
+                <button onclick="openCustomRequest()" class="btn btn-secondary"><i class="fa-brands fa-whatsapp"></i> اطلب خدمة برمجية خاصة</button>
+            </div>
+        </section>
+
+        <!-- Search & Filter Controls -->
+        <section class="filter-section" id="products">
+            <div class="filter-grid">
+                <div class="input-group">
+                    <i class="fa-solid fa-search"></i>
+                    <input type="text" id="searchInput" class="form-control" placeholder="ابحث عن اسم الخدمة أو الكود (مثال: BODA-001)..." oninput="applyFilters()">
+                </div>
+
+                <div class="input-group">
+                    <select id="categorySelect" class="form-control" onchange="applyFilters()">
+                        <option value="all">جميع الاقسام</option>
+                        <option value="android">تطبيقات Android</option>
+                        <option value="sketchware">Sketchware Pro</option>
+                        <option value="web">مواقع الويب</option>
+                        <option value="uiux">واجهات UI/UX</option>
+                        <option value="games">برمجة الألعاب</option>
+                        <option value="dashboard">لوحات التحكم</option>
+                        <option value="fixes">إصلاح الأخطاء</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <select id="sortSelect" class="form-control" onchange="applyFilters()">
+                        <option value="default">الترتيب الافتراضي</option>
+                        <option value="price-asc">السعر: من الأقل للأعلى</option>
+                        <option value="price-desc">السعر: من الأعلى للأقل</option>
+                    </select>
+                </div>
+
+                <button class="btn btn-secondary favorites-toggle-btn" id="favFilterBtn" onclick="toggleFavoritesOnly()">
+                    <i class="fa-solid fa-heart"></i> المفضلة فقط
+                </button>
+            </div>
+        </section>
+
+        <!-- Products Grid Header -->
+        <div class="products-header">
+            <div class="section-title">
+                <i class="fa-solid fa-cubes"></i> الخدمات الرقمية المتاحة
+            </div>
+            <div class="product-count" id="productCounter">جاري التحميل...</div>
+        </div>
+
+        <!-- Products Grid -->
+        <div class="grid" id="productsGrid">
+            <!-- Dynamically populated via JavaScript -->
+        </div>
+
+        <!-- Store Advantages -->
+        <section class="features-section" id="about">
+            <div class="feature-box">
+                <i class="fa-solid fa-shield-halved"></i>
+                <h3>أكواد نظيفة وآمنة</h3>
+                <p>تطوير البرمجيات بأعلى معايير الأمان مع ضمان الخلو من الثغرات.</p>
+            </div>
+            <div class="feature-box">
+                <i class="fa-solid fa-clock"></i>
+                <h3>تسليم في الموعد</h3>
+                <p>التزام تام بالمواعيد المحددة مع متابعة دورية أثناء تطوير المشروع.</p>
+            </div>
+            <div class="feature-box">
+                <i class="fa-solid fa-headset"></i>
+                <h3>دعم فني متواصل</h3>
+                <p>دعم فني واستشارات برمجة مجانية بعد تسليم المشروع.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Product Details Modal -->
+    <div class="modal-overlay" id="productModal">
+        <div class="modal-container">
+            <button class="modal-close" onclick="closeModal('productModal')"><i class="fa-solid fa-xmark"></i></button>
+            <div class="modal-header">
+                <div class="modal-title" id="mTitle">عنوان الخدمة</div>
+                <div class="modal-subtitle" id="mCode">BODA-000</div>
+            </div>
+            <div class="modal-body">
+                <div class="detail-block">
+                    <h4><i class="fa-solid fa-align-right"></i> الوصف الشامل</h4>
+                    <p id="mDesc">وصف الخدمة الكامل سيظهر هنا...</p>
+                </div>
+                <div class="detail-block">
+                    <h4><i class="fa-solid fa-star"></i> المميزات المضمنة</h4>
+                    <p id="mFeatures">المميزات التفصيلية...</p>
+                </div>
+                <div class="detail-block">
+                    <h4><i class="fa-solid fa-box-open"></i> المخرجات والتسليم</h4>
+                    <p id="mDeliverables">ما الذي ستحصل عليه بالتفصيل...</p>
+                </div>
+                <div class="detail-block" style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <span style="font-size: 0.8rem; color: var(--text-muted);">السعر التقديري:</span>
+                        <div style="font-size: 1.5rem; font-weight: 900; color: var(--neon-green);" id="mPrice">0 ج.م</div>
+                    </div>
+                    <button class="btn btn-whatsapp" id="mOrderBtn">
+                        <i class="fa-brands fa-whatsapp"></i> اطلب الخدمة عبر واتساب
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Panel Modal -->
+    <div class="modal-overlay" id="adminModal">
+        <div class="modal-container">
+            <button class="modal-close" onclick="closeModal('adminModal')"><i class="fa-solid fa-xmark"></i></button>
+            
+            <!-- Auth Screen -->
+            <div id="adminAuthView">
+                <div class="modal-header">
+                    <div class="modal-title"><i class="fa-solid fa-lock"></i> دخول لوحة التحكم</div>
+                    <p style="font-size: 0.85rem; color: var(--text-muted);">أدخل بيانات الدخول التجريبية (اسم المستخدم: admin / كلمة السر: 123456)</p>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    <input type="text" id="adminUser" class="form-control" placeholder="اسم المستخدم">
+                    <input type="password" id="adminPass" class="form-control" placeholder="كلمة السر">
+                    <button class="btn btn-primary" onclick="loginAdmin()">تسجيل الدخول</button>
+                </div>
+            </div>
+
+            <!-- Dashboard Screen -->
+            <div id="adminDashboardView" style="display: none;">
+                <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <div class="modal-title"><i class="fa-solid fa-sliders"></i> لوحة إدارة المتجر</div>
+                        <p style="font-size: 0.8rem; color: var(--text-muted);">ملاحظة: البيانات تحفظ محلياً فقط في متصفحك (LocalStorage)</p>
+                    </div>
+                    <button class="btn btn-secondary btn-sm" onclick="logoutAdmin()">خروج</button>
+                </div>
+
+                <div class="modal-body">
+                    <!-- Config Settings -->
+                    <div class="detail-block">
+                        <h4><i class="fa-solid fa-gear"></i> إعدادات المتجر العامة</h4>
+                        <div style="display: flex; flex-direction: column; gap: 0.8rem; margin-top: 0.5rem;">
+                            <label style="font-size: 0.85rem;">رقم الواتساب المستلم (بصيغة دولية بدون +):</label>
+                            <input type="text" id="cfgWhatsapp" class="form-control" value="201282268704">
+                            
+                            <label style="font-size: 0.85rem;">اسم المتجر:</label>
+                            <input type="text" id="cfgStoreName" class="form-control" value="بوده المكسيكي">
+                            
+                            <button class="btn btn-primary btn-sm" onclick="saveSettings()">حفظ الإعدادات العامة</button>
+                        </div>
+                    </div>
+
+                    <!-- Add New Product Form -->
+                    <div class="detail-block">
+                        <h4><i class="fa-solid fa-plus-circle"></i> إضافة خدمة / منتج جديد</h4>
+                        <div style="display: flex; flex-direction: column; gap: 0.8rem; margin-top: 0.5rem;">
+                            <input type="text" id="npTitle" class="form-control" placeholder="اسم الخدمة">
+                            <input type="text" id="npCode" class="form-control" placeholder="كود المنتج (مثال: BODA-011)">
+                            <select id="npCategory" class="form-control">
+                                <option value="android">تطبيقات Android</option>
+                                <option value="sketchware">Sketchware Pro</option>
+                                <option value="web">مواقع الويب</option>
+                                <option value="uiux">واجهات UI/UX</option>
+                                <option value="games">برمجة الألعاب</option>
+                                <option value="dashboard">لوحات التحكم</option>
+                                <option value="fixes">إصلاح الأخطاء</option>
+                            </select>
+                            <input type="number" id="npPrice" class="form-control" placeholder="السعر بالجنيه المصري">
+                            <input type="text" id="npIcon" class="form-control" placeholder="فئة أيقونة FontAwesome (مثال: fa-mobile-screen)">
+                            <textarea id="npDesc" class="form-control" placeholder="وصف قصير للخدمة"></textarea>
+                            <button class="btn btn-primary" onclick="addNewProduct()">إضافة الخدمة للمتجر</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="#" class="whatsapp-float" id="globalWhatsappBtn" title="تواصل مباشر عبر الواتساب" target="_blank">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <!-- Toast Notifications Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="#" class="logo-box">
+                        <div class="logo-icon"><i class="fa-solid fa-code"></i></div>
+                        <div class="logo-text">متجر <span>بوده المكسيكي</span></div>
+                    </a>
+                    <p>وجهتك الأولى للحصول على أفضل الخدمات البرمجية الاحترافية بأحدث التقنيات وبأعلى جودة تنفيذ.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>روابط سريعة</h4>
+                    <ul>
+                        <li><a href="#" onclick="filterCategory('all'); return false;">الرئيسية</a></li>
+                        <li><a href="#products">المنتجات</a></li>
+                        <li><a href="#" onclick="toggleFavoritesOnly(); return false;">المفضلة</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>تواصل معنا</h4>
+                    <ul>
+                        <li><a href="#" id="footerWaLink" target="_blank"><i class="fa-brands fa-whatsapp"></i> واتساب مباشر</a></li>
+                        <li><a href="#"><i class="fa-solid fa-envelope"></i> الدعم الفني</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                جميع الحقوق محفوظة &copy; 2026 متجر بوده المكسيكي | Boda Programming Store
+            </div>
+        </div>
+    </footer>
+
+    <!-- Application Script Logic -->
+    <script>
+        /* ==========================================================================
+           Initial Mock Data & Default Configuration
+           ========================================================================== */
+        const DEFAULT_CONFIG = {
+            whatsappNumber: "201282268704",
+            storeName: "بوده المكسيكي",
+            heroTitle: "حوّل فكرتك إلى تطبيق احترافي مع بوده المكسيكي"
+        };
+
+        const INITIAL_PRODUCTS = [
+            {
+                id: "BODA-001",
+                title: "تصميم تطبيق Android متكامل",
+                category: "android",
+                price: 850,
+                icon: "fa-mobile-screen-button",
+                desc: "تصميم وتطوير تطبيق أندرويد احترافي متجاوب وسريع مع ربط بقواعد البيانات وشاشات سلسة.",
+                features: "واجهات جرافيكية حديثة، ربط Firebase، إشعارات لحظية، أداء عالي وسريع.",
+                deliverables: "ملف APK جاهز للتثبيت + السورس كود الكامل + دعم لمدة شهر."
+            },
+            {
+                id: "BODA-002",
+                title: "برمجة تطبيقات Sketchware Pro",
+                category: "sketchware",
+                price: 450,
+                icon: "fa-cubes",
+                desc: "إنشاء مشاريع Sketchware حصرية بدون أخطاء، مع دمج المكونات المتقدمة والبلوكات الخاصة.",
+                features: "بلوكات مخصصة، كود نظيف، دعم جميع الشاشات، حماية التطبيق من الهندسة العكسية.",
+                deliverables: "مشروع .swb مفتوح المصدر قابل للتعديل."
+            },
+            {
+                id: "BODA-003",
+                title: "تصميم موقع HTML / CSS / JS",
+                category: "web",
+                price: 600,
+                icon: "fa-code",
+                desc: "تطوير موقع إلكتروني تعريفي أو متجر خفيف بتصميم جذاب واستجابة كاملة لجميع الهواتف.",
+                features: "تصميم نيون حديث، سرعة فائقة، متوافق مع محركات البحث SEO، أنيميشن سلس.",
+                deliverables: "ملفات الموقع الكاملة جاهزة للنشر على GitHub Pages أو أي استضافة."
+            },
+            {
+                id: "BODA-004",
+                title: "تصميم واجهات تطبيقات UI/UX",
+                category: "uiux",
+                price: 400,
+                icon: "fa-compass-drafting",
+                desc: "رسم واجهات المستخدم وتجربة الاستخدام بأسلوب تقني جذاب وفخم يضمن راحة المستخدم.",
+                features: "ألوان نيون متناسقة، أيقونات احترافية، نماذج تفاعلية تجريبية.",
+                deliverables: "ملفات التصميم والموارد عالية الدقة جاهزة للتكويد."
+            },
+            {
+                id: "BODA-005",
+                title: "برمجة ألعاب بسيطة (2D)",
+                category: "games",
+                price: 750,
+                icon: "fa-gamepad",
+                desc: "تطوير لعبة ثنائية الأبعاد ممتعة للهواتف أو المتصفح مع تحكم سلس ونظام نقاط.",
+                features: "مؤثرات صوتية، رسوميات جذابة، حفظ أعلى النقاط محلياً.",
+                deliverables: "ملف اللعبة القابل للتشغيل + الملفات المصدريّة."
+            },
+            {
+                id: "BODA-006",
+                title: "إنشاء لوحة تحكم للادارة Admin",
+                category: "dashboard",
+                price: 900,
+                icon: "fa-chart-pie",
+                desc: "لوحة تحكم إدارية تمكنك من متابعة البيانات، إضافة وحذف المنتجات، وإدارة المستخدمين.",
+                features: "إحصائيات بالرسم البياني، إدارة الصلاحيات، حماية وتسجيل دخول.",
+                deliverables: "لوحة تحكم كاملة مربطة بقاعدة البيانات."
+            },
+            {
+                id: "BODA-007",
+                title: "إصلاح أخطاء الأكواد البرمجية",
+                category: "fixes",
+                price: 250,
+                icon: "fa-bug-slash",
+                desc: "فحص وتتبع الأخطاء في أسرع وقت، وإصلاح مشاكل التوافقية والتوقف المفاجئ.",
+                features: "معالجة أخطاء Crash، تسريع الكود، حل مشاكل التصميم.",
+                deliverables: "تقرير بالأخطاء المعالجة + الكود المعدل والمنقح."
+            },
+            {
+                id: "BODA-008",
+                title: "تصميم شعار وهوية بصرية تقنية",
+                category: "uiux",
+                price: 300,
+                icon: "fa-wand-magic-sparkles",
+                desc: "ابتكار شعار احترافي يعبر عن طبيعة مشروعك البرمجي أو قناتك بأسلوب نيون متوهج.",
+                features: "نماذج متعددة، تصميم المتجهات عالية الجودة، ألوان متناسقة.",
+                deliverables: "شعار بجميع الصيغ (PNG شفافة، SVG، JPG) وبجودة 4K."
+            },
+            {
+                id: "BODA-009",
+                title: "تطوير ميزات وإضافات مخصصة",
+                category: "android",
+                price: 350,
+                icon: "fa-puzzle-piece",
+                desc: "إضافة ميزات جديدة لتطبيقك الحالي مثل نظام الدفع، الإشعارات، أو الوضع المظلم.",
+                features: "دمج سلس مع كودك الحالي بدون إحداث مشاكل جانبية.",
+                deliverables: "الملفات المحدثة مع شرح طريقة الدمج."
+            },
+            {
+                id: "BODA-010",
+                title: "باقة البرمجة الشاملة حسب الطلب",
+                category: "web",
+                price: 1500,
+                icon: "fa-crown",
+                desc: "حل برمي متكامل بناءً على فكرتك من الصفر وحتى التسليم والمتابعة الدورية.",
+                features: "تخطيط شامل، تصميم وتطوير، اختبار دقيق، استضافة وتدريب.",
+                deliverables: "مشروع كامل مخصص بالكامل مع استشارة مجانية."
+            }
+        ];
+
+        /* ==========================================================================
+           State Management & App Initialization
+           ========================================================================== */
+        let products = [];
+        let favorites = [];
+        let config = { ...DEFAULT_CONFIG };
+        let showFavoritesOnly = false;
+
+        // Initialize App on DOM Ready
+        document.addEventListener('DOMContentLoaded', () => {
+            loadStateFromLocalStorage();
+            applyTheme('dark'); // Default Futuristic Dark Mode
+            renderProducts();
+            updateConfigUI();
+            setupGlobalWhatsApp();
+        });
+
+        // LocalStorage Loader
+        function loadStateFromLocalStorage() {
+            const storedProducts = localStorage.getItem('boda_products');
+            products = storedProducts ? JSON.parse(storedProducts) : [...INITIAL_PRODUCTS];
+
+            const storedFavs = localStorage.getItem('boda_favorites');
+            favorites = storedFavs ? JSON.parse(storedFavs) : [];
+
+            const storedConfig = localStorage.getItem('boda_config');
+            config = storedConfig ? JSON.parse(storedConfig) : { ...DEFAULT_CONFIG };
+        }
+
+        function saveProductsToStorage() {
+            localStorage.setItem('boda_products', JSON.stringify(products));
+        }
+
+        function saveFavoritesToStorage() {
+            localStorage.setItem('boda_favorites', JSON.stringify(favorites));
+            updateFavBadge();
+        }
+
+        function saveConfigToStorage() {
+            localStorage.setItem('boda_config', JSON.stringify(config));
+            updateConfigUI();
+            setupGlobalWhatsApp();
+        }
+
+        /* ==========================================================================
+           UI & Configuration Render Functions
+           ========================================================================== */
+        function updateConfigUI() {
+            document.getElementById('headerStoreName').innerHTML = `${config.storeName.split(' ')[0]} <span>${config.storeName.split(' ').slice(1).join(' ')}</span>`;
+            document.getElementById('heroTitleDisplay').innerText = config.heroTitle;
+            document.getElementById('cfgWhatsapp').value = config.whatsappNumber;
+            document.getElementById('cfgStoreName').value = config.storeName;
+            updateFavBadge();
+        }
+
+        function setupGlobalWhatsApp() {
+            const globalWa = document.getElementById('globalWhatsappBtn');
+            const footerWa = document.getElementById('footerWaLink');
+            const defaultMsg = encodeURIComponent(`السلام عليكم يا ${config.storeName}، أود الاستفسار عن الخدمات البرمجية المتاحة لديك.`);
+            const link = `https://wa.me/${config.whatsappNumber}?text=${defaultMsg}`;
+            
+            if (globalWa) globalWa.href = link;
+            if (footerWa) footerWa.href = link;
+        }
+
+        function updateFavBadge() {
+            document.getElementById('favBadgeCount').innerText = `المفضلة (${favorites.length})`;
+        }
+
+        /* ==========================================================================
+           Theme Switcher Logic
+           ========================================================================== */
+        const themeBtn = document.getElementById('themeToggleBtn');
+        themeBtn.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            applyTheme(newTheme);
+        });
+
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            themeBtn.innerHTML = theme === 'dark' ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+        }
+
+        /* ==========================================================================
+           Products Rendering & Filter Functions
+           ========================================================================== */
+        function renderProducts() {
+            const grid = document.getElementById('productsGrid');
+            const searchVal = document.getElementById('searchInput').value.trim().toLowerCase();
+            const categoryVal = document.getElementById('categorySelect').value;
+            const sortVal = document.getElementById('sortSelect').value;
+
+            // Filter logic
+            let filtered = products.filter(p => {
+                const matchesSearch = p.title.toLowerCase().includes(searchVal) || 
+                                      p.id.toLowerCase().includes(searchVal) || 
+                                      p.desc.toLowerCase().includes(searchVal);
+                const matchesCat = categoryVal === 'all' || p.category === categoryVal;
+                const matchesFav = !showFavoritesOnly || favorites.includes(p.id);
+
+                return matchesSearch && matchesCat && matchesFav;
+            });
+
+            // Sorting logic
+            if (sortVal === 'price-asc') {
+                filtered.sort((a, b) => a.price - b.price);
+            } else if (sortVal === 'price-desc') {
+                filtered.sort((a, b) => b.price - a.price);
+            }
+
+            // Counter Update
+            document.getElementById('productCounter').innerText = `عدد الخدمات المعروضة: ${filtered.length}`;
+
+            // Render Empty State
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fa-solid fa-magnifying-glass-minus"></i>
+                        <h3>لا توجد نتائج مطابقة!</h3>
+                        <p style="color: var(--text-muted); margin-top: 0.5rem;">جرب البحث بكلمات أخرى أو اختر قسماً مختلفاً.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Build HTML Cards
+            grid.innerHTML = filtered.map(product => {
+                const isFav = favorites.includes(product.id);
+                return `
+                    <div class="card">
+                        <div>
+                            <div class="card-top">
+                                <span class="badge">${getCategoryName(product.category)}</span>
+                                <button class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFavorite('${product.id}')" title="إضافة للمفضلة">
+                                    <i class="fa-solid fa-heart"></i>
+                                </button>
+                            </div>
+                            <div class="card-icon-box">
+                                <i class="fa-solid ${product.icon}"></i>
+                            </div>
+                            <h3 class="card-title">${product.title}</h3>
+                            <div class="card-code">كود الخدمة: ${product.id}</div>
+                            <p class="card-desc">${product.desc}</p>
+                        </div>
+                        <div class="card-footer">
+                            <div class="price-row">
+                                <span class="price-label">السعر المعروض:</span>
+                                <span class="price-val">${product.price} ج.م</span>
+                            </div>
+                            <div class="card-buttons">
+                                <button class="btn btn-secondary btn-sm" onclick="openProductModal('${product.id}')">
+                                    <i class="fa-solid fa-info-circle"></i> التفاصيل
+                                </button>
+                                <button class="btn btn-whatsapp btn-sm" onclick="triggerWhatsAppOrder('${product.id}')">
+                                    <i class="fa-brands fa-whatsapp"></i> اطلب الآن
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function getCategoryName(catKey) {
+            const map = {
+                'android': 'تطبيقات Android',
+                'sketchware': 'Sketchware Pro',
+                'web': 'مواقع الويب',
+                'uiux': 'واجهات UI/UX',
+                'games': 'برمجة الألعاب',
+                'dashboard': 'لوحات التحكم',
+                'fixes': 'إصلاح الأخطاء'
+            };
+            return map[catKey] || 'خدمة برمجية';
+        }
+
+        function applyFilters() {
+            renderProducts();
+        }
+
+        function filterCategory(cat) {
+            document.getElementById('categorySelect').value = cat;
+            showFavoritesOnly = false;
+            document.getElementById('favFilterBtn').classList.remove('btn-primary');
+            applyFilters();
+        }
+
+        function toggleFavoritesOnly() {
+            showFavoritesOnly = !showFavoritesOnly;
+            const btn = document.getElementById('favFilterBtn');
+            if (showFavoritesOnly) {
+                btn.style.background = 'rgba(255, 0, 127, 0.2)';
+                btn.style.borderColor = 'var(--neon-pink)';
+            } else {
+                btn.style.background = '';
+                btn.style.borderColor = '';
+            }
+            applyFilters();
+        }
+
+        function toggleFavorite(id) {
+            const index = favorites.indexOf(id);
+            if (index > -1) {
+                favorites.splice(index, 1);
+                showToast('تمت إزالة الخدمة من المفضلة');
+            } else {
+                favorites.push(id);
+                showToast('تمت إضافة الخدمة إلى المفضلة ❤️');
+            }
+            saveFavoritesToStorage();
+            renderProducts();
+        }
+
+        /* ==========================================================================
+           WhatsApp Dynamic Encoder System
+           ========================================================================== */
+        function triggerWhatsAppOrder(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            const message = 
+`السلام عليكم يا ${config.storeName}، أريد طلب الخدمة التالية:
+
+📌 اسم الخدمة: ${product.title}
+💰 السعر المعروض: ${product.price} جنيه مصري
+🏷️ كود المنتج: ${product.id}
+📝 الوصف: ${product.desc}
+
+من فضلك ارسلي تفاصيل التنفيذ، مدة التسليم، وطريقة استلام المشروع.`;
+
+            const encodedMessage = encodeURIComponent(message);
+            const waURL = `https://wa.me/${config.whatsappNumber}?text=${encodedMessage}`;
+            window.open(waURL, '_blank');
+        }
+
+        function openCustomRequest() {
+            const message = encodeURIComponent(`السلام عليكم يا ${config.storeName}، أود طلب خدمة برمجية خاصة غير مدرجة في القائمة.`);
+            window.open(`https://wa.me/${config.whatsappNumber}?text=${message}`, '_blank');
+        }
+
+        /* ==========================================================================
+           Modals Control Logic
+           ========================================================================== */
+        function openProductModal(productId) {
+            const p = products.find(prod => prod.id === productId);
+            if (!p) return;
+
+            document.getElementById('mTitle').innerText = p.title;
+            document.getElementById('mCode').innerText = `كود الخدمة: ${p.id}`;
+            document.getElementById('mDesc').innerText = p.desc;
+            document.getElementById('mFeatures').innerText = p.features || 'تواصل لمعرفة كافة التفاصيل والمميزات المخصصة.';
+            document.getElementById('mDeliverables').innerText = p.deliverables || 'تسليم الملفات المصدرية بالكامل.';
+            document.getElementById('mPrice').innerText = `${p.price} ج.م`;
+
+            const orderBtn = document.getElementById('mOrderBtn');
+            orderBtn.onclick = () => {
+                triggerWhatsAppOrder(p.id);
+                closeModal('productModal');
+            };
+
+            document.getElementById('productModal').classList.add('active');
+        }
+
+        function openAdminModal() {
+            document.getElementById('adminModal').classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        /* ==========================================================================
+           Admin Dashboard Logic
+           ========================================================================== */
+        function loginAdmin() {
+            const user = document.getElementById('adminUser').value;
+            const pass = document.getElementById('adminPass').value;
+
+            if (user === 'admin' && pass === '123456') {
+                document.getElementById('adminAuthView').style.display = 'none';
+                document.getElementById('adminDashboardView').style.display = 'block';
+                showToast('تم تسجيل الدخول بنجاح');
+            } else {
+                showToast('بيانات الدخول غير صحيحة!');
+            }
+        }
+
+        function logoutAdmin() {
+            document.getElementById('adminAuthView').style.display = 'block';
+            document.getElementById('adminDashboardView').style.display = 'none';
+            document.getElementById('adminUser').value = '';
+            document.getElementById('adminPass').value = '';
+            closeModal('adminModal');
+        }
+
+        function saveSettings() {
+            const num = document.getElementById('cfgWhatsapp').value.trim();
+            const name = document.getElementById('cfgStoreName').value.trim();
+
+            if (!num || !name) {
+                showToast('الرجاء إدخال بيانات صحيحة');
+                return;
+            }
+
+            config.whatsappNumber = num;
+            config.storeName = name;
+            saveConfigToStorage();
+            showToast('تم حفظ الإعدادات بنجاح');
+        }
+
+        function addNewProduct() {
+            const title = document.getElementById('npTitle').value.trim();
+            const code = document.getElementById('npCode').value.trim();
+            const category = document.getElementById('npCategory').value;
+            const price = parseFloat(document.getElementById('npPrice').value);
+            const icon = document.getElementById('npIcon').value.trim() || 'fa-code';
+            const desc = document.getElementById('npDesc').value.trim();
+
+            if (!title || !code || isNaN(price) || !desc) {
+                showToast('يرجى ملء جميع الحقول المطلوبة');
+                return;
+            }
+
+            const newProd = {
+                id: code,
+                title,
+                category,
+                price,
+                icon,
+                desc,
+                features: "خدمة مخصصة جديدة من لوحة التحكم.",
+                deliverables: "تسليم كافة المخرجات البرمجية فور الانتهاء."
+            };
+
+            products.unshift(newProd);
+            saveProductsToStorage();
+            renderProducts();
+
+            // Reset Form Inputs
+            document.getElementById('npTitle').value = '';
+            document.getElementById('npCode').value = '';
+            document.getElementById('npPrice').value = '';
+            document.getElementById('npDesc').value = '';
+
+            showToast('تمت إضافة الخدمة الجديدة بنجاح! 🚀');
+        }
+
+        /* ==========================================================================
+           Toast Notifications Helper
+           ========================================================================== */
+        function showToast(msg) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `<i class="fa-solid fa-circle-check" style="color: var(--neon-blue);"></i> <span>${msg}</span>`;
+            
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(50px)';
+                toast.style.transition = 'all 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+  </html>
